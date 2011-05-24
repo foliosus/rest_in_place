@@ -66,7 +66,7 @@ RestInPlaceEditor.prototype = {
     self.formType      = self.element.attr("data-formtype")    || self.formtype || "input";
     self.objectName    = self.element.attr("data-object")      || self.objectName;
     self.attributeName = self.element.attr("data-attribute")   || self.attributeName;
-    self.formContent   = self.element.attr("data-formcontent") || self.oldValue;
+    self.formContent   = self.element.attr("data-formcontent") || self.element.html();
   },
   
   bindForm : function() {
