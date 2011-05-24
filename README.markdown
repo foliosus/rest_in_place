@@ -125,10 +125,10 @@ follows:
 -   To use REST in Place on a complex data field, for example one that is parsed with
     Markdown or Textile, you can use something like this:
     
-    <div id="<%= dom_id @user # == "user_1" %>">
-      Name:  <span class="rest_in_place" data-attribute="name" ><%= @user.name %></span><br/>
-      Notes: <span class="rest_in_place" data-attribute="notes" data-formtype="textarea" data-formcontent="<%=h @user.notes %>"><%= textilize(@user.notes) %></span>
-    </div>
+        <div id="<%= dom_id @user # == "user_1" %>">
+          Name:  <span class="rest_in_place" data-attribute="name" ><%= @user.name %></span><br/>
+          Notes: <span class="rest_in_place" data-attribute="notes" data-formtype="textarea" data-formcontent="<%=h @user.notes %>"><%= textilize(@user.notes) %></span>
+        </div>
     
     In your controller, make sure that the `show` action's JSON includes a `notes-formcontent`
     attribute with the raw `notes` field, and a `notes` attribute with the formatted `textilize(@user.notes)` content.
