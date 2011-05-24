@@ -62,10 +62,11 @@ RestInPlaceEditor.prototype = {
       }
     });
     // Load own attributes (overrides all others)
-    self.url           = self.element.attr("data-url")       || self.url      || document.location.pathname;
-    self.formType      = self.element.attr("data-formtype")  || self.formtype || "input";
-    self.objectName    = self.element.attr("data-object")    || self.objectName;
-    self.attributeName = self.element.attr("data-attribute") || self.attributeName;
+    self.url           = self.element.attr("data-url")         || self.url      || document.location.pathname;
+    self.formType      = self.element.attr("data-formtype")    || self.formtype || "input";
+    self.objectName    = self.element.attr("data-object")      || self.objectName;
+    self.attributeName = self.element.attr("data-attribute")   || self.attributeName;
+    self.formContent   = self.element.attr("data-formcontent") || self.oldValue;
   },
   
   bindForm : function() {
@@ -99,6 +100,11 @@ RestInPlaceEditor.prototype = {
     //jq14: data as JS object, not string.
     if (jQuery.fn.jquery < "1.4") data = eval('(' + data + ')' );
     this.element.html(data[this.objectName][this.attributeName]);
+    if(data[this.objectName][this.attributeName + '_formcontent']) {
+      this.formContent = data[this.objectName][this.attributeName + '_formcontent'];
+    } else {
+      this.formContent = data[this.objectName][this.attributeName];
+    }
     this.element.bind('click', {editor: this}, this.clickHandler);    
   },
   
@@ -112,7 +118,7 @@ RestInPlaceEditor.forms = {
   "input" : {
     /* is bound to the editor and called to replace the element's content with a form for editing data */
     activateForm : function() {
-      this.element.html('<form action="javascript:void(0)" style="display:inline;"><input type="text" value="' + jQuery.trim(this.oldValue) + '"></form>');
+      this.element.html('<form action="javascript:void(0)" style="display:inline;"><input type="text" value="' + jQuery.trim(this.formContent) + '"></form>');
       this.element.find('input')[0].select();
       this.element.find("form")
         .bind('submit', {editor: this}, RestInPlaceEditor.forms.input.submitHandler);
@@ -137,7 +143,7 @@ RestInPlaceEditor.forms = {
   "textarea" : {
     /* is bound to the editor and called to replace the element's content with a form for editing data */
     activateForm : function() {
-      this.element.html('<form action="javascript:void(0)" style="display:inline;"><textarea>' + jQuery.trim(this.oldValue) + '</textarea></form>');
+      this.element.html('<form action="javascript:void(0)" style="display:inline;"><textarea>' + jQuery.trim(this.formContent) + '</textarea></form>');
       this.element.find('textarea')[0].select();
       this.element.find("textarea")
         .bind('blur', {editor: this}, RestInPlaceEditor.forms.textarea.blurHandler);
